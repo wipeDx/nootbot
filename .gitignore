@@ -1,6 +1,7 @@
 
 /config.json
-/NootbotRewrite.iml
-/.idea/
-/src/test/
-/target/
+.idea/
+NootbotRewrite.iml
+src/main/resources/
+src/test/
+target/
