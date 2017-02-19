@@ -1,4 +1,4 @@
-package util;
+package pw.wiped.util;
 
 import java.io.*;
 

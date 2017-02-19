@@ -1,12 +1,16 @@
-package util;
+package pw.wiped.util;
 
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pw.wiped.Bot;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -15,10 +19,10 @@ import java.util.Scanner;
 public class Config {
 
     private static String token;
-    private static char cmdPrefix;
-    private static String[] admins;
-    private static String[] blacklisted;
-    private static String[] connectedGuilds;
+    private static String cmdPrefix;
+    private static ArrayList<User> admins;
+    private static ArrayList<User> blacklisted;
+    private static ArrayList<Guild> connectedGuilds;
 
     public Config (String[] args) throws IOException, ParseException {
         File configFile = new File(args.length == 0 ? "config.json" : args[0]);
@@ -63,17 +67,41 @@ public class Config {
     private static void parseConfig (File cf) throws IOException, ParseException {
         JSONObject temp = (JSONObject) new JSONParser().parse(IO.readFile(cf.getName()));
         token = (String) temp.get("token");
-        cmdPrefix = (char) temp.get("cmdPrefix");
+        cmdPrefix = (String) temp.get("cmdPrefix");
         JSONArray tempJSONArray = (JSONArray) temp.get("admins");
-        admins = new String[tempJSONArray.size()];
+        admins = new ArrayList<>();
         for (int i = 0; i < tempJSONArray.size(); i++) {
-            admins[i] = (String) tempJSONArray.get(i);
+            admins.add(Bot.getJDA().getUserById((String) tempJSONArray.get(i)));
         }
         tempJSONArray = (JSONArray) temp.get("blacklisted");
-        blacklisted = new String[tempJSONArray.size()];
+        blacklisted = new ArrayList<>();
         for (int i = 0; i < tempJSONArray.size(); i++) {
-            blacklisted[i] = (String) tempJSONArray.get(i);
+            blacklisted.add(Bot.getJDA().getUserById((String) tempJSONArray.get(i)));
         }
+    }
+
+    public static String getToken() {
+        return token;
+    }
+
+    public static void initGuild(Guild g) {
+
+    }
+
+    public static String getCmdPrefix() {
+        return cmdPrefix;
+    }
+
+    public static ArrayList<User> getAdmins() {
+        return admins;
+    }
+
+    public static ArrayList<User> getBlacklisted() {
+        return blacklisted;
+    }
+
+    public static ArrayList<Guild> getConnectedGuilds() {
+        return connectedGuilds;
     }
 
 }

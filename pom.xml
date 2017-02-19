@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pw.wiped</groupId>
-    <artifactId>Nootbot-Rewrite</artifactId>
+    <artifactId>Nootbot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
 
@@ -58,6 +58,14 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>pw.wiped.Bot</mainClass>
                 </configuration>
             </plugin>
         </plugins>
