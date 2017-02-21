@@ -23,6 +23,7 @@ public class Config {
     private static ArrayList<User> admins;
     private static ArrayList<User> blacklisted;
     private static ArrayList<Guild> connectedGuilds;
+    private static File config;
 
     public Config (String[] args) throws IOException, ParseException {
         File configFile = new File(args.length == 0 ? "config.json" : args[0]);
@@ -32,6 +33,7 @@ public class Config {
         else {
             createConfig(configFile);
         }
+        config = configFile;
     }
 
     private void createConfig(File configFile) throws IOException {
@@ -68,6 +70,10 @@ public class Config {
         JSONObject temp = (JSONObject) new JSONParser().parse(IO.readFile(cf.getName()));
         token = (String) temp.get("token");
         cmdPrefix = (String) temp.get("cmdPrefix");
+    }
+
+    public static void initConfig () throws IOException, ParseException {
+        JSONObject temp = (JSONObject) new JSONParser().parse(IO.readFile(config.getName()));
         JSONArray tempJSONArray = (JSONArray) temp.get("admins");
         admins = new ArrayList<>();
         for (int i = 0; i < tempJSONArray.size(); i++) {

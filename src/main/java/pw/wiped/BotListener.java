@@ -1,12 +1,11 @@
 package pw.wiped;
 
-import java.sql.SQLException;
-
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.utils.SimpleLog;
+import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
 
 class BotListener extends ListenerAdapter {
@@ -15,7 +14,7 @@ class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived (MessageReceivedEvent event) {
-        if (event.getMessage().getContent().startsWith(Config.getCmdPrefix()) && !event.getAuthor().isBot()) {
+        if (event.getMessage().getContent().startsWith(Config.getCmdPrefix()) && !event.getAuthor().isBot() && CommandManager.getCommands().containsKey(event.getMessage().getContent().replaceFirst(Config.getCmdPrefix(), "").split(" ")[0])) {
             Bot.cmdMng.handleCommand(Bot.cmdMng.parse(event.getMessage().getContent(), event));
         }
     }

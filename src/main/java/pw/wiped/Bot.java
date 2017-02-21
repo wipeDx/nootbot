@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.parser.ParseException;
+import pw.wiped.commands.Noot;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
 
@@ -30,21 +31,18 @@ public class Bot {
         // Initialize config
         try {
             config = new Config (args);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            jda = new JDABuilder(AccountType.BOT).setToken(Config.getToken()).buildBlocking();
+            Config.initConfig();    // initialize Admins and Blacklisted
+        } catch (IOException | ParseException | InterruptedException | RateLimitedException | LoginException e) {
             e.printStackTrace();
         }
 
-        try {
-            jda = new JDABuilder(AccountType.BOT).setToken(Config.getToken()).buildBlocking();
-        } catch (LoginException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (RateLimitedException e) {
-            e.printStackTrace();
-        }
+        jda.addEventListener(new BotListener());
+
+        // Register Commands
+
+        new Noot();
+
 
     }
 

@@ -87,4 +87,8 @@ public class CommandManager {
         return Bot.cmdMng;
 
     }
+
+    public static HashMap<String, Command> getCommands() {
+        return commands;
+    }
 }

@@ -18,13 +18,13 @@ public abstract class Command {
 
     public final String[] commands;
     public final Permissions requiredPermissions;
-    private final SimpleLog LOG;
+    protected final SimpleLog LOG;
 
-    public Command (Permissions requiredPermissions, String... commands) {
+    public Command (String name, Permissions requiredPermissions, String... commands) {
         this.commands = commands;
         this.requiredPermissions = requiredPermissions;
-        this.LOG = SimpleLog.getLog(this.getClass().getName());
-        LOG.info(this.getClass().getName() + " loaded. Following commands: " + Arrays.toString(commands));
+        this.LOG = SimpleLog.getLog(name);
+        LOG.info(name + " loaded. Following commands: " + Arrays.toString(commands));
     }
 
     public abstract void action (String param, String[] args, MessageReceivedEvent e);
