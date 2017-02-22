@@ -1,6 +1,7 @@
 package pw.wiped.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import pw.wiped.Bot;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Permissions;
 
@@ -10,7 +11,7 @@ import pw.wiped.util.Permissions;
 public class Noot {
 
     public Noot() {
-        CommandManager.addCommand(new Command("Noot", Permissions.GUEST, "noot", "nootnoot") {
+        Bot.cmdMng.addCommand(new Command("Noot", Permissions.GUEST, "noot", "nootnoot") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {

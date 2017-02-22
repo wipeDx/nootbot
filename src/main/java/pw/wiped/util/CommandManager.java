@@ -80,7 +80,7 @@ public class CommandManager {
 
     }
 
-    public static CommandManager addCommand(Command cmd) {
+    public CommandManager addCommand(Command cmd) {
         for (String s : cmd.commands) {
             commands.put(s, cmd);
         }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class AdminCommands {
     public AdminCommands() {
-        CommandManager.addCommand(new Command("CheckPrivileges", Permissions.ADMIN,"cp",  "checkprivileges") {
+        Bot.cmdMng.addCommand(new Command("CheckPrivileges", Permissions.ADMIN,"cp",  "checkprivileges") {
 
 
 
