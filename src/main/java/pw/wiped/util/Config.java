@@ -2,6 +2,7 @@ package pw.wiped.util;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,6 +12,7 @@ import pw.wiped.Bot;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -22,8 +24,13 @@ public class Config {
     private static String cmdPrefix;
     private static ArrayList<User> admins;
     private static ArrayList<User> blacklisted;
-    private static ArrayList<Guild> connectedGuilds;
+    private static HashMap<String, GuildPermissions> connectedGuilds;
     private static File config;
+    private static final SimpleLog LOG = SimpleLog.getLog("PermissionHandler");
+
+
+
+    private static File guildFolder;
 
     public Config (String[] args) throws IOException, ParseException {
         File configFile = new File(args.length == 0 ? "config.json" : args[0]);
@@ -34,9 +41,10 @@ public class Config {
             createConfig(configFile);
         }
         config = configFile;
+        connectedGuilds = new HashMap<>();
     }
 
-    private void createConfig(File configFile) throws IOException {
+    private void createConfig(File configFile) throws IOException, ParseException {
         Scanner scan = new Scanner(System.in);
         String configString = "{\n";
         System.out.println ("###########################################");
@@ -64,6 +72,7 @@ public class Config {
         scan.nextLine();
         scan.close();
         IO.writeFile(configFile, configString);
+        parseConfig(configFile);
     }
 
     private static void parseConfig (File cf) throws IOException, ParseException {
@@ -84,6 +93,19 @@ public class Config {
         for (int i = 0; i < tempJSONArray.size(); i++) {
             blacklisted.add(Bot.getJDA().getUserById((String) tempJSONArray.get(i)));
         }
+
+        guildFolder = new File("guilds");
+        if (!guildFolder.exists()) {
+            boolean success = guildFolder.mkdir();
+            if (success)
+                LOG.info("Guild folder didn't exist, created successfully.");
+            else
+                LOG.fatal("Guild folder didn't exist, creating one failed.");
+        }
+        else {
+            LOG.info("Guild folder exists.");
+        }
+
     }
 
     public static String getToken() {
@@ -106,8 +128,20 @@ public class Config {
         return blacklisted;
     }
 
-    public static ArrayList<Guild> getConnectedGuilds() {
+    public static HashMap<String, GuildPermissions> getConnectedGuilds() {
         return connectedGuilds;
     }
 
+    public static void addAdmin(User u) {
+        admins.add(u);
+    }
+
+    public static File getGuildFolder() {
+        return guildFolder;
+    }
+
+    public static void addGuild(Guild g, GuildPermissions guildPermissions) {
+        LOG.info("Adding Guild " + g.getName() + " with ID " + g.getId() + "\" to the system.");
+        connectedGuilds.put(g.getId(), guildPermissions);
+    }
 }

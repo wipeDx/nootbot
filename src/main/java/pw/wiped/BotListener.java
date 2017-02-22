@@ -5,8 +5,12 @@ import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.utils.SimpleLog;
+import org.json.simple.parser.ParseException;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
+import pw.wiped.util.GuildPermissions;
+
+import java.io.IOException;
 
 class BotListener extends ListenerAdapter {
 
@@ -28,7 +32,13 @@ class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildJoin (GuildJoinEvent gje) {
-        Config.initGuild(gje.getGuild());
+        try {
+            new GuildPermissions(gje.getGuild());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         LOG.info("Joined guild " + gje.getGuild().getName() + ". Initializing.. ");
     }
 }
