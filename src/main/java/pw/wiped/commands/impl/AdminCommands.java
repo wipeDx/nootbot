@@ -1,24 +1,24 @@
-package pw.wiped.commands;
+package pw.wiped.commands.impl;
 
-import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import pw.wiped.Bot;
-import pw.wiped.util.CommandManager;
+import pw.wiped.commands.AbstractCommand;
+import pw.wiped.commands.Command;
+import pw.wiped.util.DiscordFunctions;
 import pw.wiped.util.PermissionHandler;
 import pw.wiped.util.Permissions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by wipeD on 22.02.2017.
  */
-public class AdminCommands {
+public class AdminCommands extends AbstractCommand {
     public AdminCommands() {
-        Bot.cmdMng.addCommand(new Command("CheckPrivileges", Permissions.ADMIN,"cp",  "checkprivileges") {
+        Bot.cmdMng.addCommand(new Command("Check privileges", Permissions.ADMIN,"cp",  "checkprivileges") {
 
 
 
@@ -57,11 +57,16 @@ public class AdminCommands {
             }
 
             @Override
-            public void help() {
+            public String help() {
+                return "checkprivileges";
+            }
 
+            @Override
+            public String moreHelp() {
+                return "";
             }
         })
-        .addCommand(new Command("RemoveMod", Permissions.MODERATOR, "rmmod", "removemod") {
+        .addCommand(new Command("Remove moderator", Permissions.MODERATOR, "rmmod", "removemod") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
@@ -76,8 +81,47 @@ public class AdminCommands {
             }
 
             @Override
-            public void help() {
+            public String help() {
+                return "removemod";
+            }
 
+            @Override
+            public String moreHelp() {
+                return "";
+            }
+        })
+        .addCommand(new Command("Change game name", Permissions.MODERATOR, "changegame") {
+
+            private long lastUse = 0;
+
+            @Override
+            public void action(String param, String[] args, MessageReceivedEvent e) {
+                if ((System.currentTimeMillis() - lastUse) >= 300000) {
+                    System.out.println (System.currentTimeMillis() + " - " + (System.currentTimeMillis() - lastUse));
+                    this.lastUse = System.currentTimeMillis();
+                    DiscordFunctions.changeGamePlayed(param);
+                }
+                else {
+                    e.getChannel().sendMessage("Sorry, you have to wait at least 5 minutes between changing game names.").complete();
+                }
+            }
+
+            @Override
+            public boolean called(String param, String[] args) {
+                return args.length > 0;
+            }
+
+            @Override
+            public String help() {
+                return "Changes game name played by NootBot";
+            }
+
+            @Override
+            public String moreHelp() {
+                StringBuilder sb = getHelpText(1);
+                sb.append(" - The string that you want to be displayed as a game.\n\n");
+                sb.append("Changes the game name that is currently played by NootBot.\nOnly moderators can use that.");
+                return sb.toString();
             }
         });
     }

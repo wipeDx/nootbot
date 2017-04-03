@@ -6,7 +6,7 @@
 
     <groupId>pw.wiped</groupId>
     <artifactId>Nootbot</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>Rewrite 0.1 Pre-Release</version>
 
 
     <repositories>
@@ -43,7 +43,12 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.0.BETA2_121</version>
+            <version>3.0.0_157</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
         </dependency>
     </dependencies>
 

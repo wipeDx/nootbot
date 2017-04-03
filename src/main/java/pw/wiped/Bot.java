@@ -7,8 +7,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.parser.ParseException;
-import pw.wiped.commands.AdminCommands;
-import pw.wiped.commands.Noot;
+import pw.wiped.commands.Command;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
 import pw.wiped.util.GuildPermissions;
@@ -21,11 +20,12 @@ import java.io.IOException;
  */
 public class Bot {
 
-    // Setting up essential parts of the bot
-    private static JDA jda;
+    public static final String VERSION = "Rewrite 0.1 Pre-Release";
     private static final SimpleLog LOG = SimpleLog.getLog("Main");
-    public static Config config;
     public final static CommandManager cmdMng = new CommandManager();
+
+    private static JDA jda;
+    public static Config config;
 
     public static void main(String[] args) {
 
@@ -49,8 +49,13 @@ public class Bot {
 
         // Register Commands
 
-        new Noot();
-        new AdminCommands();
+        try {
+            Command.initCommands();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
 
 
     }
