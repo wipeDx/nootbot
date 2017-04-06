@@ -5,15 +5,15 @@ import net.dv8tion.jda.core.utils.SimpleLog;
 import org.reflections.Reflections;
 import pw.wiped.util.Permissions;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by wiped on 2/19/17.
+ * The main structure of a command. Sets up general stuff like a logger but also initializes all commands without the
+ * need of mentioning them. Reflection yeah!
  */
 public abstract class Command {
 
-    private static Reflections initCommandList = new Reflections("pw.wiped.commands.impl");
+    private static final Reflections initCommandList = new Reflections("pw.wiped.commands.impl");
 
     public static void initCommands() throws IllegalAccessException, InstantiationException {
         for (Class c : initCommandList.getSubTypesOf(AbstractCommand.class)) {
@@ -26,7 +26,7 @@ public abstract class Command {
     public final Permissions requiredPermissions;
     protected final SimpleLog LOG;
 
-    public Command (String name, Permissions requiredPermissions, String... commands) {
+    protected Command (String name, Permissions requiredPermissions, String... commands) {
         this.name = name;
         this.commands = commands;
         this.requiredPermissions = requiredPermissions;
@@ -34,12 +34,22 @@ public abstract class Command {
         LOG.info(name + " loaded. Following commands: " + Arrays.toString(commands));
     }
 
-    protected StringBuilder getHelpText(int numArgs) {
+    protected StringBuilder getHelpText(int... numArgs) {
         StringBuilder sb = new StringBuilder();
         sb.append("Permissions required: ");
         sb.append(this.requiredPermissions.toString());
         sb.append("\nArguments required: ");
-        sb.append(numArgs);
+        for (int i = 0; i < numArgs.length; i++) {
+            if (numArgs[i] == -1) {
+
+                sb.delete(sb.lastIndexOf("\nArguments required: "), sb.length()-1);
+                sb.append("\nArguments required: infinite | ");
+                break;
+            }
+            sb.append(i);
+            sb.append(" | ");
+        }
+        sb.delete(sb.length()-3, sb.length()-1);
         sb.append("\n\n");
         return sb;
     }

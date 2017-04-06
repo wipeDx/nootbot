@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * This class is meant to manage all the input/output Nootbot needs to do
  */
-public class IO {
+class IO {
 
     /**
      * A simple method to read the configfile
@@ -13,7 +13,6 @@ public class IO {
      * @return The file's content
      */
     public static String readFile (String filename) throws IOException {
-        String result = "";
         BufferedReader br = new BufferedReader(new FileReader(filename));
         StringBuilder sb = new StringBuilder();
         String line = br.readLine();
@@ -21,9 +20,7 @@ public class IO {
             sb.append(line);
             line = br.readLine();
         }
-        result = sb.toString();
-
-        return result;
+        return sb.toString();
     }
 
     public static void writeFile(File configFile, String configString) throws IOException {

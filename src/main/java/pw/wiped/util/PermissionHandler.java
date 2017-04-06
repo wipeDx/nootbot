@@ -2,13 +2,9 @@ package pw.wiped.util;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
-import org.json.simple.JSONObject;
-
-import java.io.File;
-import java.util.ArrayList;
 
 /**
- * Created by wiped on 2/19/17.
+ * PermissionHandler returns the permission of a specific user in a specific guild. (Only Bot-Permission)
  */
 public class PermissionHandler {
 

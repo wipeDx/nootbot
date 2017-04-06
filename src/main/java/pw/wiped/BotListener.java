@@ -34,9 +34,7 @@ class BotListener extends ListenerAdapter {
     public void onGuildJoin (GuildJoinEvent gje) {
         try {
             new GuildPermissions(gje.getGuild());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         LOG.info("Joined guild " + gje.getGuild().getName() + ". Initializing.. ");

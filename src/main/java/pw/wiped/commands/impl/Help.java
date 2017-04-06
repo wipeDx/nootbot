@@ -12,12 +12,12 @@ import pw.wiped.util.Permissions;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
- * Created by wipeD on 03.04.2017.
+ * The Help-command is more than just displaying the help in general.
+ * It also manages the help-message of every other command.
  */
-public class Help extends AbstractCommand {
+class Help extends AbstractCommand {
 
 
     public Help() {

@@ -14,18 +14,18 @@ import pw.wiped.util.Permissions;
 import java.util.List;
 
 /**
- * Created by wipeD on 22.02.2017.
+ * AdminCommands (and actually soon-to-be ModeratorCommands) consists of AdminCommands like checking and individual's
+ * privileges (which was actually just to debug) or to add / remove a moderator (bot-mod, non discord) (non functional!)
+ * Or changing the game name that Nootbot's playing
  */
-public class AdminCommands extends AbstractCommand {
+class AdminCommands extends AbstractCommand {
     public AdminCommands() {
         Bot.cmdMng.addCommand(new Command("Check privileges", Permissions.ADMIN,"cp",  "checkprivileges") {
-
-
-
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 LOG.info(param);
-                String response = "Privilege check!\n";
+                StringBuilder response = new StringBuilder();
+                response.append("Privilege check!\n");
                 if (e.getChannelType() == ChannelType.TEXT) {
                     List<Member> usersToCheck = e.getGuild().getMembersByEffectiveName(param, true);
                     if (usersToCheck.size() == 0) {
@@ -37,18 +37,24 @@ public class AdminCommands extends AbstractCommand {
                     }
                     for (Member m : usersToCheck) {
                         String name = (m.getNickname() == null ? m.getEffectiveName() : m.getEffectiveName() + " (" + m.getUser().getName() + ")");
-                        response += name + ": " + PermissionHandler.getUserPermission(m.getUser(), e.getGuild()) + ", ";
+                        response.append(name);
+                        response.append(": ");
+                        response.append(PermissionHandler.getUserPermission(m.getUser(), e.getGuild()));
+                        response.append(", ");
                     }
                 }
                 else {
                     List<User> usersToCheck = Bot.getJDA().getUsersByName(param, true);
                     for (User u: usersToCheck) {
-                        response += u.getName() + ": " + PermissionHandler.getUserPermission(u, null) + ", ";
+                        response.append(u.getName());
+                        response.append(": ");
+                        response.append("PermissionHandler.getUserPermission(u, null)");
+                        response.append(", ");
                     }
                 }
 
-
-                e.getChannel().sendMessage(response.substring(0, response.length() - 2)).complete();
+                response.delete(response.length()-2, response.length()-1);
+                e.getChannel().sendMessage(response.toString()).complete();
             }
 
             @Override
@@ -68,6 +74,7 @@ public class AdminCommands extends AbstractCommand {
         })
         .addCommand(new Command("Remove moderator", Permissions.MODERATOR, "rmmod", "removemod") {
 
+            @SuppressWarnings("StatementWithEmptyBody")
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 if (e.getChannelType() != ChannelType.TEXT) {

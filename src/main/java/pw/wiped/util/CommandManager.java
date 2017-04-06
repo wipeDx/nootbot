@@ -14,11 +14,11 @@ import java.util.HashMap;
 
 
 /**
- * Created by wiped on 2/19/17.
+ * CommandManager manages commands (ooh!). It accepts calls from the BotListener and converts them into command-calls
  */
 public class CommandManager {
     private final SimpleLog LOG = SimpleLog.getLog("CommandManager");
-    private static HashMap<String, Command> commands = new HashMap<>();
+    private static final HashMap<String, Command> commands = new HashMap<>();
 
     public CommandContainer parse (String rw, MessageReceivedEvent e) {
         // Splitting everything accordingly and setting mandatory variables like author, arguments etc.
@@ -79,6 +79,7 @@ public class CommandManager {
 
     }
 
+    @SuppressWarnings("SameReturnValue")
     public CommandManager addCommand(Command cmd) {
         for (String s : cmd.commands) {
             commands.put(s, cmd);

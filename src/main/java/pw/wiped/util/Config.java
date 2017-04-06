@@ -85,13 +85,13 @@ public class Config {
         JSONObject temp = (JSONObject) new JSONParser().parse(IO.readFile(config.getName()));
         JSONArray tempJSONArray = (JSONArray) temp.get("admins");
         admins = new ArrayList<>();
-        for (int i = 0; i < tempJSONArray.size(); i++) {
-            admins.add(Bot.getJDA().getUserById((String) tempJSONArray.get(i)));
+        for (Object aTempJSONArray : tempJSONArray) {
+            admins.add(Bot.getJDA().getUserById((String) aTempJSONArray));
         }
         tempJSONArray = (JSONArray) temp.get("blacklisted");
         blacklisted = new ArrayList<>();
-        for (int i = 0; i < tempJSONArray.size(); i++) {
-            blacklisted.add(Bot.getJDA().getUserById((String) tempJSONArray.get(i)));
+        for (Object aTempJSONArray : tempJSONArray) {
+            blacklisted.add(Bot.getJDA().getUserById((String) aTempJSONArray));
         }
 
         guildFolder = new File("guilds");

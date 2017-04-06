@@ -7,9 +7,9 @@ import pw.wiped.commands.Command;
 import pw.wiped.util.Permissions;
 
 /**
- * Created by wiped on 2/21/17.
+ * The Noot Command, which this whole bot originated from, just responds with a "Noot Noot!"
  */
-public class Noot extends AbstractCommand {
+class Noot extends AbstractCommand {
 
     public Noot() {
         Bot.cmdMng.addCommand(new Command("Noot", Permissions.GUEST, "noot", "nootnoot") {
@@ -54,7 +54,7 @@ public class Noot extends AbstractCommand {
             @Override
             public String moreHelp() {
                 StringBuilder sb = getHelpText(0);
-                sb.append("Displays a message that's very accurate to this bot's owner's serious level.");
+                sb.append("Displays a message that's very accurate to this bot's owner's seriousness level.");
                 return sb.toString();
             }
         });

@@ -14,16 +14,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by wipeD on 22.02.2017.
+ * Manages the Permissions on the guild-part. These can be set per-guild.
  */
 public class GuildPermissions {
 
-    private Guild guild;
-    private ArrayList<User> mods;
-    private ArrayList<User> members;
+    private final Guild guild;
+    private final ArrayList<User> mods;
+    private final ArrayList<User> members;
     private ArrayList<User> blacklisted;
     private Permissions voicePermissions;
-    private File guildFile;
+    private final File guildFile;
     private JSONObject content;
     private static SimpleLog LOG = SimpleLog.getLog("GuildPermissions");
 
@@ -104,16 +104,16 @@ public class GuildPermissions {
     private JSONObject readGuildContent (File guildFile) throws IOException, ParseException {
         JSONObject guildContent = (JSONObject) new JSONParser().parse(IO.readFile(guildFile.getAbsolutePath()));
         JSONArray temp = (JSONArray) guildContent.get("mods");
-        for (int i = 0; i < temp.size(); i++) {
-            mods.add(Bot.getJDA().getUserById((String) temp.get(i)));
+        for (Object aTemp : temp) {
+            mods.add(Bot.getJDA().getUserById((String) aTemp));
         }
         temp = (JSONArray) guildContent.get("members");
-        for (int i = 0; i < temp.size(); i++) {
-            members.add(Bot.getJDA().getUserById((String) temp.get(i)));
+        for (Object aTemp : temp) {
+            members.add(Bot.getJDA().getUserById((String) aTemp));
         }
         temp = (JSONArray) guildContent.get("blacklisted");
-        for (int i = 0; i < temp.size(); i++) {
-            blacklisted.add(Bot.getJDA().getUserById((String) temp.get(i)));
+        for (Object aTemp : temp) {
+            blacklisted.add(Bot.getJDA().getUserById((String) aTemp));
         }
         this.voicePermissions = Permissions.valueOf((String) guildContent.get("voicePermissions"));
 

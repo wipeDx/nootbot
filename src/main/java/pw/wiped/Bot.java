@@ -16,7 +16,8 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
 /**
- * Created by wipeD on 21.01.2017.
+ * The main class of the Bot. Does all the good things. Initializing everything, establishing the connection, loading
+ * the config. You name it!
  */
 public class Bot {
 
@@ -25,7 +26,6 @@ public class Bot {
     public final static CommandManager cmdMng = new CommandManager();
 
     private static JDA jda;
-    public static Config config;
 
     public static void main(String[] args) {
 
@@ -33,7 +33,7 @@ public class Bot {
 
         // Initialize config
         try {
-            config = new Config (args);
+            Config config = new Config(args);
             jda = new JDABuilder(AccountType.BOT).setToken(Config.getToken()).buildBlocking();
             Config.initConfig();    // initialize Admins and Blacklisted
             // Register connected Guilds
@@ -51,9 +51,7 @@ public class Bot {
 
         try {
             Command.initCommands();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
 
