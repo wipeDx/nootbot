@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * SimpleCommands that only compute a little and throw out a response right after.
  * These commands are: Roll the dice, Flip a coin and throwing out a random part of an argument list.
  */
-class SimpleCommands extends AbstractCommand{
+public class SimpleCommands extends AbstractCommand{
 
     public SimpleCommands () {
         Bot.cmdMng.addCommand(new Command("Roll", Permissions.GUEST, "roll", "rtd", "dice") {

@@ -9,7 +9,7 @@ import pw.wiped.util.Permissions;
 /**
  * The Noot Command, which this whole bot originated from, just responds with a "Noot Noot!"
  */
-class Noot extends AbstractCommand {
+public class Noot extends AbstractCommand {
 
     public Noot() {
         Bot.cmdMng.addCommand(new Command("Noot", Permissions.GUEST, "noot", "nootnoot") {

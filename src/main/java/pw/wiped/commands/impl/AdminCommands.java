@@ -7,7 +7,6 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import pw.wiped.Bot;
 import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
-import pw.wiped.util.DiscordFunctions;
 import pw.wiped.util.PermissionHandler;
 import pw.wiped.util.Permissions;
 
@@ -18,7 +17,7 @@ import java.util.List;
  * privileges (which was actually just to debug) or to add / remove a moderator (bot-mod, non discord) (non functional!)
  * Or changing the game name that Nootbot's playing
  */
-class AdminCommands extends AbstractCommand {
+public class AdminCommands extends AbstractCommand {
     public AdminCommands() {
         Bot.cmdMng.addCommand(new Command("Check privileges", Permissions.ADMIN,"cp",  "checkprivileges") {
             @Override
@@ -95,40 +94,6 @@ class AdminCommands extends AbstractCommand {
             @Override
             public String moreHelp() {
                 return "";
-            }
-        })
-        .addCommand(new Command("Change game name", Permissions.MODERATOR, "changegame") {
-
-            private long lastUse = 0;
-
-            @Override
-            public void action(String param, String[] args, MessageReceivedEvent e) {
-                if ((System.currentTimeMillis() - lastUse) >= 300000) {
-                    System.out.println (System.currentTimeMillis() + " - " + (System.currentTimeMillis() - lastUse));
-                    this.lastUse = System.currentTimeMillis();
-                    DiscordFunctions.changeGamePlayed(param);
-                }
-                else {
-                    e.getChannel().sendMessage("Sorry, you have to wait at least 5 minutes between changing game names.").complete();
-                }
-            }
-
-            @Override
-            public boolean called(String param, String[] args) {
-                return args.length > 0;
-            }
-
-            @Override
-            public String help() {
-                return "Changes game name played by NootBot";
-            }
-
-            @Override
-            public String moreHelp() {
-                StringBuilder sb = getHelpText(1);
-                sb.append(" - The string that you want to be displayed as a game.\n\n");
-                sb.append("Changes the game name that is currently played by NootBot.\nOnly moderators can use that.");
-                return sb.toString();
             }
         });
     }

@@ -39,14 +39,14 @@ public abstract class Command {
         sb.append("Permissions required: ");
         sb.append(this.requiredPermissions.toString());
         sb.append("\nArguments required: ");
-        for (int i = 0; i < numArgs.length; i++) {
-            if (numArgs[i] == -1) {
+        for (int numArg : numArgs) {
+            if (numArg == -1) {
 
-                sb.delete(sb.lastIndexOf("\nArguments required: "), sb.length()-1);
+                sb.delete(sb.lastIndexOf("\nArguments required: "), sb.length() - 1);
                 sb.append("\nArguments required: infinite | ");
                 break;
             }
-            sb.append(i);
+            sb.append(numArg);
             sb.append(" | ");
         }
         sb.delete(sb.length()-3, sb.length()-1);

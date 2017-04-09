@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * The Help-command is more than just displaying the help in general.
  * It also manages the help-message of every other command.
  */
-class Help extends AbstractCommand {
+public class Help extends AbstractCommand {
 
 
     public Help() {
