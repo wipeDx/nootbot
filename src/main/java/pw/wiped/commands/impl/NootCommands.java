@@ -7,11 +7,11 @@ import pw.wiped.commands.Command;
 import pw.wiped.util.Permissions;
 
 /**
- * The Noot Command, which this whole bot originated from, just responds with a "Noot Noot!"
+ * The NootCommands, which this whole bot originated from, just responds with a "Noot Noot!"
  */
-public class Noot extends AbstractCommand {
+public class NootCommands extends AbstractCommand {
 
-    public Noot() {
+    public NootCommands() {
         Bot.cmdMng.addCommand(new Command("Noot", Permissions.GUEST, "noot", "nootnoot") {
 
             @Override
