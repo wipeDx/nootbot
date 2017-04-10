@@ -21,7 +21,7 @@ public class NootCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return true;
             }
 
@@ -42,7 +42,7 @@ public class NootCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return true;
             }
 

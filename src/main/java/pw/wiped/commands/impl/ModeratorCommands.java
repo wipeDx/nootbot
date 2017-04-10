@@ -36,7 +36,7 @@ public class ModeratorCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return args.length > 0;
             }
 
@@ -67,7 +67,7 @@ public class ModeratorCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 if (args.length == 0)
                     amount = 1;
                 else
@@ -112,7 +112,7 @@ public class ModeratorCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return args.length >= 2;
             }
 

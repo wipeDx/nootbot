@@ -57,7 +57,7 @@ public class AdminCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return args.length > 0;
             }
 
@@ -82,7 +82,7 @@ public class AdminCommands extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return args.length > 0;
             }
 

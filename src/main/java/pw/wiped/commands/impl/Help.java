@@ -59,7 +59,7 @@ public class Help extends AbstractCommand {
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return true;
             }
 

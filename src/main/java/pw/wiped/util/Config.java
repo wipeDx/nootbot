@@ -26,10 +26,9 @@ public class Config {
     private static ArrayList<User> blacklisted;
     private static HashMap<String, GuildPermissions> connectedGuilds;
     private static File config;
-    private static final SimpleLog LOG = SimpleLog.getLog("PermissionHandler");
+    private static final SimpleLog LOG = SimpleLog.getLog("Config");
 
-
-
+    private static File presetFolder;
     private static File guildFolder;
 
     public Config (String[] args) throws IOException, ParseException {
@@ -94,6 +93,18 @@ public class Config {
             blacklisted.add(Bot.getJDA().getUserById((String) aTempJSONArray));
         }
 
+        presetFolder = new File("presets");
+        if (!presetFolder.exists()) {
+            boolean success = presetFolder.mkdir();
+            if (success)
+                LOG.info("Preset folder didn't exist, created successfully.");
+            else
+                LOG.fatal("Preset folder didn't exist, creating one failed.");
+        }
+        else {
+            LOG.info("Preset folder exists.");
+        }
+
         guildFolder = new File("guilds");
         if (!guildFolder.exists()) {
             boolean success = guildFolder.mkdir();
@@ -143,5 +154,9 @@ public class Config {
     public static void addGuild(Guild g, GuildPermissions guildPermissions) {
         LOG.info("Adding Guild " + g.getName() + " with ID " + g.getId() + "\" to the system.");
         connectedGuilds.put(g.getId(), guildPermissions);
+    }
+
+    public static File getPresetFolder() {
+        return presetFolder;
     }
 }

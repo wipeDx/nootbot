@@ -6,11 +6,6 @@ import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
 import pw.wiped.util.Permissions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * SimpleCommands that only compute a little and throw out a response right after.
  * These commands are: Roll the dice, Flip a coin and throwing out a random part of an argument list.
@@ -65,7 +60,7 @@ public class SimpleCommands extends AbstractCommand{
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return true;
             }
 
@@ -84,44 +79,6 @@ public class SimpleCommands extends AbstractCommand{
                 sb.append("\n\nNegative numbers won't work, they are being abstracted (-1 => |-1| = 1).");
                 sb.append("\nIf the second number is bigger, the numbers will be switched around.");
                 sb.append("\nThe maximum number is 999.999, everything above will be set to that.");
-                return sb.toString();
-            }
-        }).addCommand(new Command("Random", Permissions.MEMBER, "random", "rand") {
-            @Override
-            public void action(String param, String[] args, MessageReceivedEvent e) {
-                Pattern pattern = Pattern.compile("\"([^\\s\"]+[^\"]*[^\\s\"]+)\"|([^\"\\s]+)");
-                Matcher matcher = pattern.matcher(param);
-
-                List<String> options = new ArrayList<>();
-
-                while (matcher.find()) {
-                    String option = matcher.group(1);
-                    option = option == null ? matcher.group(2) : option;
-                    option = option.replaceAll("^\\s+|\\s+$", "");
-                    if (!option.isEmpty()) {
-                        options.add(option);
-                    }
-                }
-                e.getChannel().sendMessage(options.get((int) (Math.random() * options.size()))).complete();
-            }
-
-            @Override
-            public boolean called(String param, String[] args) {
-                return args.length > 1;
-            }
-
-            @Override
-            public String help() {
-                return "Selects an argument randomly and returns it.(Good for deciding!)";
-            }
-
-            @Override
-            public String moreHelp() {
-                StringBuilder sb = getHelpText(-1);
-                sb.append("Selects a random argument given which could be good for deciding!");
-                sb.append("\n\n.random This is Random\n\t- Could produce either \"This\", \"is\" or \"Random\".");
-                sb.append("\n.rand This \"also works\" well\n\t-Could produce either \"This\", \"also works\" or \"well\".");
-                sb.append("\n\nNested quotation marks don't work.");
                 return sb.toString();
             }
         }).addCommand(new Command("Flip", Permissions.GUEST, "flip", "flop", "flipflop", "flopflip") {
@@ -154,7 +111,7 @@ public class SimpleCommands extends AbstractCommand{
             }
 
             @Override
-            public boolean called(String param, String[] args) {
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
                 return true;
             }
 

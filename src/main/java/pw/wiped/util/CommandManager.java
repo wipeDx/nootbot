@@ -67,7 +67,7 @@ public class CommandManager {
         }
 
         boolean enoughPermission = PermissionHandler.getUserPermission(cmd.author, cmd.e.getGuild()).ordinal() >= cmd.command.requiredPermissions.ordinal();
-        boolean sufficientArgs = cmd.command.called(cmd.param, cmd.args);
+        boolean sufficientArgs = cmd.command.called(cmd.param, cmd.args, cmd.e);
 
         if (enoughPermission && sufficientArgs) {
             cmd.command.action(cmd.param, cmd.args, cmd.e);

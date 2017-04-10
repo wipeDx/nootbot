@@ -55,7 +55,7 @@ public abstract class Command {
     }
 
     public abstract void action (String param, String[] args, MessageReceivedEvent e);
-    public abstract boolean called (String param, String[] args);
+    public abstract boolean called(String param, String[] args, MessageReceivedEvent e);
     public abstract String help ();
     public abstract String moreHelp();
 
