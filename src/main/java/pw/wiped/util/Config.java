@@ -123,10 +123,6 @@ public class Config {
         return token;
     }
 
-    public static void initGuild(Guild g) {
-
-    }
-
     public static String getCmdPrefix() {
         return cmdPrefix;
     }

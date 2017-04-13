@@ -21,7 +21,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
- * Created by wipeD on 11.04.2017.
+ * Reddit functionality
  */
 public class Reddit extends AbstractCommand {
 
@@ -85,13 +85,22 @@ public class Reddit extends AbstractCommand {
 
             @Override
             public String help() {
-                return null;
+                return "Returns whatever you want on reddit";
             }
 
             @Override
             public String moreHelp() {
-                return null;
+                StringBuilder sb = getHelpText(0, 1, 2);
+                sb.append("1 Argument:\n - hot / new: clarifies whether to get the hottest or newest from /r/aww");
+                sb.append("\n 2 Arguments:\n - <subreddit>: Which subreddit to get the result from.");
+                sb.append("\n - hot / new: clarifies whether to get the hottest or newest from /r/<subreddit>");
+                sb.append("\n\n.r - Displays the currently hottest entry from /r/aww");
+                sb.append("\n.r new - Displays the currently newest entry from /r/aww");
+                sb.append("\n.reddit funny - Displays the currently hottest entry from /r/funny");
+                sb.append("\n.reddit funny new - Displays the currently newest entry from /r/funny");
+                return sb.toString();
             }
+
             private String readUrl(String urlString) throws Exception {
                 URLConnection urlConnection = new URL(urlString).openConnection();
                 urlConnection.addRequestProperty("User-Agent", "RedditCommand Noot-Bot V0.1 by /u/weiped");
