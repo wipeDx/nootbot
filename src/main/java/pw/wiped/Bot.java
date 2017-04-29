@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 import pw.wiped.commands.Command;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
-import pw.wiped.util.GuildPermissions;
+import pw.wiped.util.permissions.GuildPermissions;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;

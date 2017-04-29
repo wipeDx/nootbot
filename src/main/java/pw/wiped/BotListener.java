@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.parser.ParseException;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
-import pw.wiped.util.GuildPermissions;
+import pw.wiped.util.permissions.GuildPermissions;
 
 import java.io.IOException;
 

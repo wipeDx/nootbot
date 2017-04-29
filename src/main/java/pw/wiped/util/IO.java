@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * This class is meant to manage all the input/output Nootbot needs to do
  */
-class IO {
+public class IO {
 
     /**
      * A simple method to read the configfile

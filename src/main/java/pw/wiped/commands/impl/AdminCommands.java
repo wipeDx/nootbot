@@ -7,8 +7,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import pw.wiped.Bot;
 import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
-import pw.wiped.util.PermissionHandler;
-import pw.wiped.util.Permissions;
+import pw.wiped.util.permissions.PermissionHandler;
+import pw.wiped.util.permissions.Permissions;
 
 import java.util.List;
 

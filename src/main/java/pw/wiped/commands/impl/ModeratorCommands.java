@@ -8,7 +8,7 @@ import pw.wiped.Bot;
 import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
 import pw.wiped.util.DiscordFunctions;
-import pw.wiped.util.Permissions;
+import pw.wiped.util.permissions.Permissions;
 
 import java.util.List;
 

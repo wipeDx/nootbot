@@ -1,8 +1,5 @@
 package pw.wiped.commands.impl;
 
-import net.dv8tion.jda.core.entities.EmbedType;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.impl.MessageEmbedImpl;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,15 +7,13 @@ import org.json.simple.parser.JSONParser;
 import pw.wiped.Bot;
 import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
-import pw.wiped.util.Permissions;
+import pw.wiped.util.permissions.Permissions;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
 /**
  * Reddit functionality

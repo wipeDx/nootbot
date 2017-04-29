@@ -7,6 +7,8 @@ import net.dv8tion.jda.core.utils.SimpleLog;
 
 import pw.wiped.Bot;
 import pw.wiped.commands.Command;
+import pw.wiped.util.permissions.PermissionHandler;
+import pw.wiped.util.permissions.Permissions;
 
 import java.util.ArrayList;
 import java.util.Collections;

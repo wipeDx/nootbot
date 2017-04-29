@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 import pw.wiped.Bot;
 import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
-import pw.wiped.util.Permissions;
+import pw.wiped.util.permissions.Permissions;
 import pw.wiped.util.PresetUtils;
 
 import java.io.IOException;

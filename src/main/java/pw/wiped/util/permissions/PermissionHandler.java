@@ -1,7 +1,8 @@
-package pw.wiped.util;
+package pw.wiped.util.permissions;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
+import pw.wiped.util.Config;
 
 /**
  * PermissionHandler returns the permission of a specific user in a specific guild. (Only Bot-Permission)

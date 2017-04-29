@@ -1,4 +1,4 @@
-package pw.wiped.util;
+package pw.wiped.util.permissions;
 
 /**
  * Just an ENUM that consists of the permissions.

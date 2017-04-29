@@ -1,4 +1,4 @@
-package pw.wiped.util;
+package pw.wiped.util.permissions;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
@@ -8,6 +8,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pw.wiped.Bot;
+import pw.wiped.util.Config;
+import pw.wiped.util.IO;
+import pw.wiped.util.permissions.Permissions;
 
 import java.io.File;
 import java.io.IOException;

@@ -3,7 +3,7 @@ package pw.wiped.commands;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import org.reflections.Reflections;
-import pw.wiped.util.Permissions;
+import pw.wiped.util.permissions.Permissions;
 
 import java.util.Arrays;
 
