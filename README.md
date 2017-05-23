@@ -47,5 +47,5 @@ The voice commands are based on [sedmelluq's LavaPlayer](https://github.com/sedm
 
 ### Who do I talk to if something goes wrong? ###
 
-* Just me, wipeD. You can find me on Discord (wipeD#1889) or via E-Mail. I'm sure you'll find that somewhere.
+* Just me, wipeD. You can find me on Discord (wipeD#1889) or via E-Mail or [join my discord!](https://discord.gg/2rfg6et). I'm sure you'll find that somewhere.
 * Create an issue on here
