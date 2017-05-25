@@ -62,7 +62,7 @@ public class PresetUtils {
 
         JSONObject presetPart = new JSONObject();
         JSONArray presetOptions = new JSONArray();
-        String presetString = "";
+        StringBuilder presetString = new StringBuilder();
 
         while (matcher.find()) {
             String option = matcher.group(1);
@@ -71,7 +71,7 @@ public class PresetUtils {
             if (!option.isEmpty()) {
                 //noinspection unchecked
                 presetOptions.add(option);
-                presetString += option + ", ";
+                presetString.append(option).append(", ");
                 LOG.log(SimpleLog.Level.DEBUG, "Added " + option + " to presetName " + presetName);
             }
         }
@@ -177,9 +177,7 @@ public class PresetUtils {
      * @throws IOException If reading the file fails.
      */
     public static File readFile (User author) throws IOException {
-        StringBuilder path = new StringBuilder();
-        path.append(Config.getPresetFolder().getCanonicalPath()).append(File.separator).append(author.getId()).append(".json");
-        File actualFile = new File(path.toString());
+        File actualFile = new File(Config.getPresetFolder().getCanonicalPath() + File.separator + author.getId() + ".json");
         if (actualFile.exists())
             return actualFile;
         else
@@ -193,8 +191,6 @@ public class PresetUtils {
      * @throws IOException If it didnt work.
      */
     public static boolean createFile (User author) throws IOException {
-        StringBuilder path = new StringBuilder();
-        path.append(Config.getPresetFolder().getCanonicalPath()).append(File.separator).append(author.getId()).append(".json");
-        return new File(path.toString()).createNewFile();
+        return new File(Config.getPresetFolder().getCanonicalPath() + File.separator + author.getId() + ".json").createNewFile();
     }
 }

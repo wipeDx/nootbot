@@ -31,6 +31,7 @@ public class Config {
 
     private static File presetFolder;
     private static File guildFolder;
+    private static File soundFolder;
 
     public Config (String[] args) throws IOException, ParseException {
         File configFile = new File(args.length == 0 ? "config.json" : args[0]);
@@ -118,6 +119,18 @@ public class Config {
             LOG.info("Guild folder exists.");
         }
 
+        soundFolder = new File("sounds");
+        if (!soundFolder.exists()) {
+            boolean success = soundFolder.mkdir();
+            if (success)
+                LOG.info("Sound folder didn't exist, created successfully.");
+            else
+                LOG.fatal("Sound folder didn't exist, creating one failed.");
+        }
+        else {
+            LOG.info("Sound folder exists.");
+        }
+
     }
 
     public static String getToken() {
@@ -155,5 +168,9 @@ public class Config {
 
     public static File getPresetFolder() {
         return presetFolder;
+    }
+
+    public static File getSoundFolder() {
+        return soundFolder;
     }
 }

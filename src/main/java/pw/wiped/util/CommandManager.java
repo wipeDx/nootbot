@@ -38,6 +38,7 @@ public class CommandManager {
         return new CommandContainer(param, rw, invoke, args, givenPermissions, e, author);
     }
 
+    @SuppressWarnings("unused")
     public class CommandContainer {
         public final String param;
         public final String raw;
@@ -73,10 +74,10 @@ public class CommandManager {
 
         if (enoughPermission && sufficientArgs) {
             cmd.command.action(cmd.param, cmd.args, cmd.e);
-            LOG.info(cmd.author.getName() + " used " + cmd.invoke + (cmd.e.isFromType(ChannelType.PRIVATE) ? "(Private)": ""));
+            LOG.info(cmd.author.getName() + " used " + cmd.invoke + (cmd.e.isFromType(ChannelType.PRIVATE) ? " (Private)": ""));
         }
         else if(!enoughPermission && sufficientArgs){
-            LOG.info(cmd.author.getName() + " tried to use " + cmd.invoke + (cmd.e.isFromType(ChannelType.PRIVATE) ? "(Private)": "") + ", but didn't have enough permission.");
+            LOG.info(cmd.author.getName() + " tried to use " + cmd.invoke + (cmd.e.isFromType(ChannelType.PRIVATE) ? " (Private)": "") + ", but didn't have enough permission.");
         }
 
     }

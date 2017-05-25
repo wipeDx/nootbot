@@ -24,6 +24,7 @@ public class Reddit extends AbstractCommand {
         Bot.cmdMng.addCommand(new Command("Reddit", Permissions.MEMBER, "reddit", "r") {
 
             private JSONParser parser;
+            private static final int MAX_NSFW_SKIPS = 20;
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
@@ -44,7 +45,7 @@ public class Reddit extends AbstractCommand {
                 JSONObject reddit = null;
                 try {
                     parser = new JSONParser();
-                    reddit = (JSONObject) parser.parse(readUrl("https://reddit.com/r/"+SUBREDDIT+"/"+SETTING+".json?limit=1"));
+                    reddit = (JSONObject) parser.parse(readUrl("https://reddit.com/r/"+SUBREDDIT+"/"+SETTING+".json?limit=" + (MAX_NSFW_SKIPS+1)));
 
                 } catch (Exception ev) {
                     ev.printStackTrace();
@@ -57,19 +58,34 @@ public class Reddit extends AbstractCommand {
 
                 JSONObject t2 = (JSONObject) first.get("data");
                 boolean isSticky = (boolean) t2.get("stickied");
-                while (isSticky) {
+
+                // Let through everything if channel is marked NSFW
+                boolean over18 = (!e.getTextChannel().isNSFW() && (boolean) t2.get("over_18"));
+                int i = 0;
+
+                while ((isSticky || over18) && i < MAX_NSFW_SKIPS) {
                     first = (JSONObject) reddit.get("data");
                     JSONArray t3 = (JSONArray) first.get("children");
                     first = (JSONObject) t3.get(++count);
                     t2 = (JSONObject) first.get("data");
                     isSticky = (boolean) t2.get("stickied");
+                    over18 = (!e.getTextChannel().isNSFW() && (boolean) t2.get("over_18"));
+                    if (!e.getTextChannel().isNSFW()) {
+                        i++;
+                        LOG.info(i);
+                    }
                 }
-
-                first = (JSONObject) first.get("data");
-                String imageurl = (String) first.get("url");
-                String title = (String) first.get("title");
-                String commentlink = (String) first.get("id");
-                String textToSend = (hot? "Hottest" : "Newest") + " /r/"+SUBREDDIT+": " + title + (imageurl.contains("imgur.com")? "\nDirect link: " + imageurl : "") + "\nComments: https://redd.it/" + commentlink;
+                String textToSend;
+                if (i == MAX_NSFW_SKIPS) {
+                    textToSend = "Too many NSFW links. I went over the limit (" + MAX_NSFW_SKIPS +")! Try different settings";
+                }
+                else {
+                    first = (JSONObject) first.get("data");
+                    String imageurl = (String) first.get("url");
+                    String title = (String) first.get("title");
+                    String commentlink = (String) first.get("id");
+                    textToSend = (hot ? "Hottest" : "Newest") + " /r/" + SUBREDDIT + ": " + title + (imageurl.contains("imgur.com") ? "\nDirect link: " + imageurl : "") + "\nComments: https://redd.it/" + commentlink;
+                }
                 e.getChannel().sendMessage(textToSend).complete();
             }
 
@@ -93,10 +109,12 @@ public class Reddit extends AbstractCommand {
                 sb.append("\n.r new - Displays the currently newest entry from /r/aww");
                 sb.append("\n.reddit funny - Displays the currently hottest entry from /r/funny");
                 sb.append("\n.reddit funny new - Displays the currently newest entry from /r/funny");
+                sb.append("\n\nExcludes NSFW content! (Except the channel is NSFW)");
                 return sb.toString();
             }
 
             private String readUrl(String urlString) throws Exception {
+                LOG.info(urlString);
                 URLConnection urlConnection = new URL(urlString).openConnection();
                 urlConnection.addRequestProperty("User-Agent", "RedditCommand Noot-Bot V0.1 by /u/weiped");
                 try (InputStream is = urlConnection.getInputStream()) {

@@ -21,19 +21,20 @@ import java.io.IOException;
  */
 public class Bot {
 
-    public static final String VERSION = "Rewrite 0.1 Pre-Release";
+    public static final String VERSION = "0.1 Beta RC";
     private static final SimpleLog LOG = SimpleLog.getLog("Main");
     public final static CommandManager cmdMng = new CommandManager();
+
 
     private static JDA jda;
 
     public static void main(String[] args) {
 
-        LOG.info ("Welcome to NootBot (+ version)");
+        LOG.info ("Welcome to NootBot " + VERSION);
 
         // Initialize config
         try {
-            Config config = new Config(args);
+            new Config(args);
             jda = new JDABuilder(AccountType.BOT).setToken(Config.getToken()).buildBlocking();
             Config.initConfig();    // initialize Admins and Blacklisted
             // Register connected Guilds

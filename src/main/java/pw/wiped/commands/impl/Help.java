@@ -1,5 +1,6 @@
 package pw.wiped.commands.impl;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.impl.MessageEmbedImpl;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -55,7 +56,10 @@ public class Help extends AbstractCommand {
                 me.setFooter(new MessageEmbed.Footer(footer, "", ""));
                 me.setImage(new MessageEmbed.ImageInfo("", "", 0, 0));
 
-                e.getChannel().sendMessage(me).complete();
+                e.getAuthor().openPrivateChannel().complete().sendMessage(me).complete();
+                if (e.getChannelType() == ChannelType.TEXT) {
+                    e.getMessage().delete().complete();
+                }
             }
 
             @Override

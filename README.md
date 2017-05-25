@@ -15,7 +15,7 @@ The voice commands are based on [sedmelluq's LavaPlayer](https://github.com/sedm
 * Easy Commandsystem
 * Commands as of time of writing:
    * (Admin)
-      *Check Privileges
+      * Check Privileges
    * (Moderator)
       * Change the game name that the bot is "playing"
       * Clear message to clear .. messages
