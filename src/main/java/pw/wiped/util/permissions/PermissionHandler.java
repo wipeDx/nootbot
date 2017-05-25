@@ -18,22 +18,28 @@ public class PermissionHandler {
         if (guild == null) {
             return Permissions.NOTFOUND;
         }
-        GuildPermissions gp = Config.getConnectedGuilds().get(guild.getId());
-        for (User u : gp.getMods()) {
-            if (u.getId().equals(user.getId())) {
-                return Permissions.MODERATOR;
+        /**GuildPermissions gp = Config.getConnectedGuilds().get(guild.getId());
+        if (!gp.getMods().isEmpty()) {
+            for (User u : gp.getMods()) {
+                if (u.getId().equals(user.getId())) {
+                    return Permissions.MODERATOR;
+                }
             }
         }
-        for (User u : gp.getMembers()) {
-            if (u.getId().equals(user.getId())) {
-                return Permissions.MEMBER;
+        if (!gp.getMembers().isEmpty()) {
+            for (User u : gp.getMembers()) {
+                if (u.getId().equals(user.getId())) {
+                    return Permissions.MEMBER;
+                }
             }
         }
-        for (User u : gp.getBlacklisted()) {
-            if (u.getId().equals(user.getId())) {
-                return Permissions.BLACKLISTED;
+        if (!gp.getBlacklisted().isEmpty()) {
+            for (User u : gp.getBlacklisted()) {
+                if (u.getId().equals(user.getId())) {
+                    return Permissions.BLACKLISTED;
+                }
             }
-        }
-        return Permissions.GUEST;
+        }*/
+        return Permissions.MEMBER;
     }
 }
