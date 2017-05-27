@@ -22,38 +22,42 @@ public class AdminCommands extends AbstractCommand {
         Bot.cmdMng.addCommand(new Command("Check privileges", Permissions.ADMIN,"cp",  "checkprivileges") {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
-                LOG.info(param);
-                StringBuilder response = new StringBuilder();
-                response.append("Privilege check!\n");
-                if (e.getChannelType() == ChannelType.TEXT) {
-                    List<Member> usersToCheck = e.getGuild().getMembersByEffectiveName(param, true);
-                    if (usersToCheck.size() == 0) {
-                        usersToCheck = e.getGuild().getMembersByName(param, true);
-                        if (usersToCheck.size() == 0) {
-                            e.getChannel().sendMessage("No such user found.").complete();
-                            return;
-                        }
-                    }
-                    for (Member m : usersToCheck) {
-                        String name = (m.getNickname() == null ? m.getEffectiveName() : m.getEffectiveName() + " (" + m.getUser().getName() + ")");
-                        response.append(name);
-                        response.append(": ");
-                        response.append(PermissionHandler.getUserPermission(m.getUser(), e.getGuild()));
-                        response.append(", ");
-                    }
+                LOG.debug(param);
+                if (e.isFromType(ChannelType.PRIVATE)) {
+                    e.getChannel().sendMessage("You can only use that in a Channel.").complete();
                 }
                 else {
-                    List<User> usersToCheck = Bot.getJDA().getUsersByName(param, true);
-                    for (User u: usersToCheck) {
-                        response.append(u.getName());
-                        response.append(": ");
-                        response.append("PermissionHandler.getUserPermission(u, null)");
-                        response.append(", ");
+                    StringBuilder response = new StringBuilder();
+                    response.append("Privilege check!\n");
+                    if (e.getChannelType() == ChannelType.TEXT) {
+                        List<Member> usersToCheck = e.getGuild().getMembersByEffectiveName(param, true);
+                        if (usersToCheck.size() == 0) {
+                            usersToCheck = e.getGuild().getMembersByName(param, true);
+                            if (usersToCheck.size() == 0) {
+                                e.getChannel().sendMessage("No such user found.").complete();
+                                return;
+                            }
+                        }
+                        for (Member m : usersToCheck) {
+                            String name = (m.getNickname() == null ? m.getEffectiveName() : m.getEffectiveName() + " (" + m.getUser().getName() + ")");
+                            response.append(name);
+                            response.append(": ");
+                            response.append(PermissionHandler.getUserPermission(m.getUser(), e.getGuild()));
+                            response.append(", ");
+                        }
+                    } else {
+                        List<User> usersToCheck = Bot.getJDA().getUsersByName(param, true);
+                        for (User u : usersToCheck) {
+                            response.append(u.getName());
+                            response.append(": ");
+                            response.append(PermissionHandler.getUserPermission(u, null));
+                            response.append(", ");
+                        }
                     }
-                }
 
-                response.delete(response.length()-2, response.length()-1);
-                e.getChannel().sendMessage(response.toString()).complete();
+                    response.delete(response.length() - 2, response.length() - 1);
+                    e.getChannel().sendMessage(response.toString()).complete();
+                }
             }
 
             @Override
@@ -73,7 +77,6 @@ public class AdminCommands extends AbstractCommand {
         })
         .addCommand(new Command("Remove moderator", Permissions.MODERATOR, "rmmod", "removemod") {
 
-            @SuppressWarnings("StatementWithEmptyBody")
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 if (e.getChannelType() != ChannelType.TEXT) {

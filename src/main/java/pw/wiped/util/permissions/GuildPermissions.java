@@ -24,7 +24,7 @@ public class GuildPermissions {
     private final Guild guild;
     private final ArrayList<User> mods;
     private final ArrayList<User> members;
-    private ArrayList<User> blacklisted;
+    private final ArrayList<User> blacklisted;
     private Permissions voicePermissions;
     private final File guildFile;
     private JSONObject content;
@@ -85,6 +85,7 @@ public class GuildPermissions {
         this.guild = g;
         this.mods = new ArrayList<>();
         this.members = new ArrayList<>();
+        this.blacklisted = new ArrayList<>();
         if (guildFile.exists()) {
             this.content = readGuildContent (guildFile);
         }

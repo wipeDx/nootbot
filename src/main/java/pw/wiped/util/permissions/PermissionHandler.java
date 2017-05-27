@@ -2,6 +2,7 @@ package pw.wiped.util.permissions;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.utils.SimpleLog;
 import pw.wiped.util.Config;
 
 /**
@@ -9,16 +10,24 @@ import pw.wiped.util.Config;
  */
 public class PermissionHandler {
 
+    private static final SimpleLog LOG = SimpleLog.getLog("PermissionHandler");
+
     public static Permissions getUserPermission (User user, Guild guild) {
+
+
+
+
+
         for (User u : Config.getAdmins()) {
             if (u.getId().equals(user.getId())) {
                 return Permissions.ADMIN;
             }
         }
         if (guild == null) {
-            return Permissions.NOTFOUND;
+            return Permissions.MEMBER;
         }
-        /**GuildPermissions gp = Config.getConnectedGuilds().get(guild.getId());
+        LOG.debug("Checking " + user.getName() + "(" + user.getId() + ") in Guild " + guild.getName() + "(" + guild.getId() + ")");
+        GuildPermissions gp = Config.getConnectedGuilds().get(guild.getId());
         if (!gp.getMods().isEmpty()) {
             for (User u : gp.getMods()) {
                 if (u.getId().equals(user.getId())) {
@@ -26,6 +35,7 @@ public class PermissionHandler {
                 }
             }
         }
+
         if (!gp.getMembers().isEmpty()) {
             for (User u : gp.getMembers()) {
                 if (u.getId().equals(user.getId())) {
@@ -39,7 +49,7 @@ public class PermissionHandler {
                     return Permissions.BLACKLISTED;
                 }
             }
-        }*/
-        return Permissions.MEMBER;
+        }
+        return Permissions.GUEST;
     }
 }
