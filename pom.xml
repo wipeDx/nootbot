@@ -48,7 +48,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.1.0_205</version>
+            <version>3.1.1_210</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>1.2.36</version>
+            <version>1.2.39</version>
         </dependency>
     </dependencies>
 

@@ -11,7 +11,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.AudioManager;
+import net.dv8tion.jda.core.utils.SimpleLog;
 import pw.wiped.Bot;
 import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
@@ -123,25 +125,30 @@ public class VoiceCommands extends AbstractCommand {
         .addCommand(new Command("Play sound", Permissions.MEMBER, "play") {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
+                LOG.setLevel(SimpleLog.Level.DEBUG);
                 if (connectedGuildID.equals(e.getGuild().getId())) {
 
                     String itemString;
                     try {
                         if (isLocalFile(param)) {
+                            LOG.debug("Local file: " + param);
                             itemString = Config.getSoundFolder().getName() + File.separator + param + ".mp3";
                         }
                         else {
+                            LOG.debug("Not a local file: " + param);
                             itemString = param;
                         }
 
                         apm.loadItem(itemString, new AudioLoadResultHandler() {
                             @Override
                             public void trackLoaded(AudioTrack track) {
+                                LOG.debug("Successfully loaded a track and queued it.");
                                 trackScheduler.queue(track);
                             }
 
                             @Override
                             public void playlistLoaded(AudioPlaylist playlist) {
+                                LOG.debug("Successfully loaded a playlist and queued it.");
                                 for (AudioTrack track : playlist.getTracks()) {
                                     trackScheduler.queue(track);
                                 }
@@ -149,23 +156,24 @@ public class VoiceCommands extends AbstractCommand {
 
                             @Override
                             public void noMatches() {
-                                e.getTextChannel().sendMessage("I didn't find anything!");
+                                LOG.debug("I didn't find anything, I'm sorry.");
+                                e.getTextChannel().sendMessage("I didn't find anything!").complete();
                             }
 
                             @Override
                             public void loadFailed(FriendlyException throwable) {
-                                e.getTextChannel().sendMessage("Loading failed :disappointed_relieved:\nNotify the admin!!");
+                                e.getTextChannel().sendMessage("Loading failed :disappointed_relieved:\nNotify the admin!!").complete();
                                 LOG.fatal(throwable.getMessage());
                             }
                         });
                     } catch (IOException e1) {
-                        e.getTextChannel().sendMessage("I don't know what went wrong. RUN!");
+                        e.getTextChannel().sendMessage("I don't know what went wrong. RUN!").complete();
                         e1.printStackTrace();
                     }
                     trackScheduler.nextTrack();
                 }
                 else {
-                    e.getChannel().sendMessage("I'm connected somewhere else, can't play a sound from here!");
+                    e.getChannel().sendMessage("I'm connected somewhere else, can't play a sound from here!").complete();
                 }
             }
 
