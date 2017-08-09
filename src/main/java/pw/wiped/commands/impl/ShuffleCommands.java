@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 public class ShuffleCommands extends AbstractCommand {
     public ShuffleCommands() {
-        Bot.cmdMng.addCommand(new Command("Shuffle", Permissions.GUEST, "shuffle") {
+        Bot.cmdMng.addCommand(new Command("Shuffle", Permissions.MEMBER, "shuffle") {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 String[] shuffled = shuffle(param);
@@ -47,7 +47,7 @@ public class ShuffleCommands extends AbstractCommand {
                 return sb.toString();
             }
         })
-        .addCommand(new Command("Overwatch shuffle", Permissions.GUEST, "owshuffle") {
+        .addCommand(new Command("Overwatch shuffle", Permissions.MEMBER, "owshuffle") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {

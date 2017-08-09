@@ -8,7 +8,6 @@ import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.parser.ParseException;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
-import pw.wiped.util.permissions.GuildPermissions;
 
 import java.io.IOException;
 
@@ -28,15 +27,5 @@ class BotListener extends ListenerAdapter {
     @Override
     public void onReady (ReadyEvent event) {
         //Bot.log ("status", "Logged in as: " + event.getJDA().getSelfInfo().getUsername());
-    }
-
-    @Override
-    public void onGuildJoin (GuildJoinEvent gje) {
-        try {
-            new GuildPermissions(gje.getGuild());
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-        LOG.info("Joined guild " + gje.getGuild().getName() + ". Initializing.. ");
     }
 }

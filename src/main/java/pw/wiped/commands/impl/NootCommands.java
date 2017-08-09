@@ -12,7 +12,7 @@ import pw.wiped.util.permissions.Permissions;
 public class NootCommands extends AbstractCommand {
 
     public NootCommands() {
-        Bot.cmdMng.addCommand(new Command("Noot", Permissions.GUEST, "noot", "nootnoot") {
+        Bot.cmdMng.addCommand(new Command("Noot", Permissions.MEMBER, "noot", "nootnoot") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
@@ -34,7 +34,7 @@ public class NootCommands extends AbstractCommand {
             public String moreHelp() {
                 return "";
             }
-        }).addCommand(new Command("Buff", Permissions.GUEST, "buff", "buffpingu") {
+        }).addCommand(new Command("Buff", Permissions.MEMBER, "buff", "buffpingu") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {

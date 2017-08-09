@@ -3,14 +3,12 @@ package pw.wiped;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.parser.ParseException;
 import pw.wiped.commands.Command;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
-import pw.wiped.util.permissions.GuildPermissions;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -21,7 +19,7 @@ import java.io.IOException;
  */
 public class Bot {
 
-    public static final String VERSION = "0.1 Beta RC";
+    public static final String VERSION = "0.2 Beta RC";
     private static final SimpleLog LOG = SimpleLog.getLog("Main");
     public final static CommandManager cmdMng = new CommandManager();
 
@@ -37,11 +35,6 @@ public class Bot {
             new Config(args);
             jda = new JDABuilder(AccountType.BOT).setToken(Config.getToken()).buildBlocking();
             Config.initConfig();    // initialize Admins and Blacklisted
-            // Register connected Guilds
-            for (Guild g: jda.getGuilds()) {
-                LOG.info("Registering guild " +g.getName()+ " with ID \"" + g.getId() + "\"");
-                Config.addGuild(g, new GuildPermissions(g));
-            }
         } catch (IOException | ParseException | InterruptedException | RateLimitedException | LoginException e) {
             e.printStackTrace();
         }

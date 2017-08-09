@@ -25,6 +25,7 @@ import pw.wiped.util.audio.TrackScheduler;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -37,12 +38,19 @@ public class VoiceCommands extends AbstractCommand {
     private static AudioPlayerManager apm = null;
     private static AudioPlayerSendHandler apsh;
     private static boolean isConnected;
-    private static String connectedGuildID;
     private static TrackScheduler trackScheduler;
+    private static HashSet<String> fileEndings;
+    private static AudioManager am = null;
 
-    private boolean isLocalFile (String param) throws IOException {
-        File f = new File(Config.getSoundFolder().getName() + File.separator + param + ".mp3");
-        return f.exists();
+    private File isLocalFile (String param) throws IOException {
+        File f;
+        for (String s : fileEndings) {
+            String fileString = Config.getSoundFolder().getName() + File.separator + param + s;
+            f = new File(fileString);
+            if (f.exists())
+                return f;
+        }
+        return null;
     }
 
     public VoiceCommands() {
@@ -52,7 +60,9 @@ public class VoiceCommands extends AbstractCommand {
         apsh = new AudioPlayerSendHandler(ap);
         trackScheduler = new TrackScheduler(ap);
         isConnected = false;
-        connectedGuildID = null;
+        fileEndings = new HashSet<>();
+        fileEndings.add(".mp3");
+        fileEndings.add(".ogg");
 
         Bot.cmdMng.addCommand(new Command("Join channel", Permissions.MEMBER, "join") {
             @Override
@@ -63,7 +73,7 @@ public class VoiceCommands extends AbstractCommand {
                 if (channel.size() == 0 && !e.getMember().getVoiceState().inVoiceChannel()) {
                     e.getChannel().sendMessage("Couldn't find that VoiceChannel").complete();
                 }
-                else if(isConnected && connectedGuildID.equals(e.getGuild().getId())) {
+                else if(isConnected) {
                     e.getChannel().sendMessage("I'm already connected somewhere else.").complete();
                 }
                 else if(param.equals("join") && e.getMember().getVoiceState().inVoiceChannel()) {
@@ -71,11 +81,10 @@ public class VoiceCommands extends AbstractCommand {
                     channel.add(e.getMember().getVoiceState().getChannel());
                 }
 
-                AudioManager am = e.getGuild().getAudioManager();
+                am = e.getGuild().getAudioManager();
                 am.openAudioConnection(channel.get(0));
                 am.setSendingHandler(apsh);
                 isConnected = true;
-                connectedGuildID = e.getGuild().getId();
 
             }
 
@@ -99,10 +108,8 @@ public class VoiceCommands extends AbstractCommand {
         .addCommand(new Command("Leave channel", Permissions.MEMBER, "leave") {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
-                AudioManager am = e.getGuild().getAudioManager();
                 am.closeAudioConnection();
                 isConnected = false;
-                connectedGuildID = null;
             }
 
             @Override
@@ -126,19 +133,20 @@ public class VoiceCommands extends AbstractCommand {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 LOG.setLevel(SimpleLog.Level.DEBUG);
-                if (connectedGuildID.equals(e.getGuild().getId())) {
+                if (am.getConnectedChannel().getGuild().getId().equals(e.getGuild().getId())) {
 
                     String itemString;
                     try {
-                        if (isLocalFile(param)) {
+                        File f = isLocalFile(param);
+                        if (f != null) {
                             LOG.debug("Local file: " + param);
-                            itemString = Config.getSoundFolder().getName() + File.separator + param + ".mp3";
+                            itemString = f.getAbsolutePath();
                         }
                         else {
                             LOG.debug("Not a local file: " + param);
                             itemString = param;
                         }
-
+						LOG.debug(itemString);
                         apm.loadItem(itemString, new AudioLoadResultHandler() {
                             @Override
                             public void trackLoaded(AudioTrack track) {

@@ -1,6 +1,7 @@
 package pw.wiped.commands.impl;
 
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -10,6 +11,7 @@ import pw.wiped.commands.Command;
 import pw.wiped.util.permissions.PermissionHandler;
 import pw.wiped.util.permissions.Permissions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,7 +77,7 @@ public class AdminCommands extends AbstractCommand {
                 return "";
             }
         })
-        .addCommand(new Command("Remove moderator", Permissions.MODERATOR, "rmmod", "removemod") {
+        .addCommand(new Command("Remove moderator", Permissions.ADMIN, "rmmod", "removemod") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
@@ -92,6 +94,33 @@ public class AdminCommands extends AbstractCommand {
             @Override
             public String help() {
                 return "removemod";
+            }
+
+            @Override
+            public String moreHelp() {
+                return "";
+            }
+        })
+        .addCommand(new Command("Leave guild", Permissions.ADMIN, "leaveGuild") {
+
+            @Override
+            public void action(String param, String[] args, MessageReceivedEvent e) {
+                for (Guild g : Bot.getJDA().getGuilds()) {
+                    if (g.getId().equals(param)) {
+                        LOG.info("Left Guild.");
+                        g.leave().complete();
+                    }
+                }
+            }
+
+            @Override
+            public boolean called(String param, String[] args, MessageReceivedEvent e) {
+                return true;
+            }
+
+            @Override
+            public String help() {
+                return "Leaves a guild.";
             }
 
             @Override

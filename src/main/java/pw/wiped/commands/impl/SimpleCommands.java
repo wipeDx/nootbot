@@ -13,7 +13,7 @@ import pw.wiped.util.permissions.Permissions;
 public class SimpleCommands extends AbstractCommand{
 
     public SimpleCommands () {
-        Bot.cmdMng.addCommand(new Command("Roll", Permissions.GUEST, "roll", "rtd", "dice") {
+        Bot.cmdMng.addCommand(new Command("Roll", Permissions.MEMBER, "roll", "rtd", "dice") {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 int min = 0;
@@ -81,7 +81,7 @@ public class SimpleCommands extends AbstractCommand{
                 sb.append("\nThe maximum number is 999.999, everything above will be set to that.");
                 return sb.toString();
             }
-        }).addCommand(new Command("Flip", Permissions.GUEST, "flip", "flop", "flipflop", "flopflip") {
+        }).addCommand(new Command("Flip", Permissions.MEMBER, "flip", "flop", "flipflop", "flopflip") {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {

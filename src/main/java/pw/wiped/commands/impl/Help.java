@@ -9,10 +9,12 @@ import pw.wiped.commands.AbstractCommand;
 import pw.wiped.commands.Command;
 import pw.wiped.util.CommandManager;
 import pw.wiped.util.Config;
+import pw.wiped.util.permissions.PermissionHandler;
 import pw.wiped.util.permissions.Permissions;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The Help-command is more than just displaying the help in general.
@@ -20,13 +22,15 @@ import java.util.ArrayList;
  */
 public class Help extends AbstractCommand {
 
+    private static final String separator = "-----";
 
     public Help() {
-        Bot.cmdMng.addCommand(new Command("Help", Permissions.GUEST, "help"){
+        Bot.cmdMng.addCommand(new Command("Help", Permissions.MEMBER, "help"){
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
                 String helpString;
+                String[] helpStrings;
                 MessageEmbed.AuthorInfo ai;
                 String desc;
                 String title;
@@ -43,15 +47,26 @@ public class Help extends AbstractCommand {
                     desc = "Sadly, the links are not clickable! Just for aesthetics :frowning:";
                     helpString = this.help();
                     title = "Main commands";
-                    footer = "Made with ♥ by wipeD! Click the title to visit the GitHub Page of NootBot!";
+                    footer = "Made with ♥ by @wipeD#1889! Click the title to visit the GitHub Page of NootBot!";
                 }
+                helpStrings = helpString.split(separator);
                 MessageEmbedImpl me = new MessageEmbedImpl();
                 me.setAuthor(ai);
                 me.setDescription(desc);
                 me.setTitle("");
                 me.setColor(Color.black);
                 ArrayList<MessageEmbed.Field> fieldList = new ArrayList<>();
-                fieldList.add(new MessageEmbed.Field(title, helpString, true));
+                for (int i = 0; i < helpStrings.length - 2; i++)
+                    fieldList.add(new MessageEmbed.Field(title + '(' + (i+1) + '/' + (helpStrings.length - 2) + ')', helpStrings[i], false));
+                if (args.length == 0) {
+                    if (PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.MODERATOR
+                            || PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.ADMIN) {
+                        fieldList.add(new MessageEmbed.Field("Moderator Commands", helpStrings[1], false));
+                        if (PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.ADMIN) {
+                            fieldList.add(new MessageEmbed.Field("Admin Commands", helpStrings[2], false));
+                        }
+                    }
+                }
                 me.setFields(fieldList);
                 me.setFooter(new MessageEmbed.Footer(footer, "", ""));
                 me.setImage(new MessageEmbed.ImageInfo("", "", 0, 0));
@@ -69,26 +84,32 @@ public class Help extends AbstractCommand {
 
             @Override
             public String help() {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder mainCommands = new StringBuilder();
+                StringBuilder modCommands = new StringBuilder();
+                StringBuilder adminCommands = new StringBuilder();
+                StringBuilder current;
+                int count = 1;
                 ArrayList<Command> checked = new ArrayList<>();
-                sb.append("[.help]() - Displays this message\n\n");
+                mainCommands.append("[.help]() - Displays this message\n\n");
                 for (Command c : CommandManager.getCommands().values()) {
+                    switch (c.requiredPermissions) {
+                        case ADMIN: current = adminCommands; break;
+                        case MODERATOR: current = modCommands; break;
+                        default: current = mainCommands; count++; if (count == 10) current.append(separator);
+                    }
                     if (c.equals(this) || checked.contains(c)) {
                         continue;
                     }
                     checked.add(c);
                     for (String s : c.commands) {
-                        sb.append("[");
-                        sb.append(Config.getCmdPrefix());
-                        sb.append(s);
-                        sb.append("]()\n");
+                        current.append("[").append(Config.getCmdPrefix()).append(s).append("]()\n");
                     }
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.append(" - ");
-                    sb.append(c.help());
-                    sb.append("\n\n");
+                    current.deleteCharAt(current.length()-1).append(" - ").append(c.help()).append("\n\n");
+                    if (c.requiredPermissions == Permissions.MEMBER)
+                        count++;
+
                 }
-                return sb.toString();
+                return mainCommands.toString() + (mainCommands.toString().endsWith(separator) ? "" : separator) + modCommands.toString() + separator + adminCommands.toString();
             }
 
             @Override

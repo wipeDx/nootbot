@@ -1,6 +1,5 @@
 package pw.wiped.util;
 
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.simple.JSONArray;
@@ -8,12 +7,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pw.wiped.Bot;
-import pw.wiped.util.permissions.GuildPermissions;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -25,7 +22,8 @@ public class Config {
     private static String cmdPrefix;
     private static ArrayList<User> admins;
     private static ArrayList<User> blacklisted;
-    private static HashMap<String, GuildPermissions> connectedGuilds;
+    private static String adminRoleID;
+    private static String moderatorRoleID;
     private static File config;
     private static final SimpleLog LOG = SimpleLog.getLog("Config");
 
@@ -42,7 +40,6 @@ public class Config {
             createConfig(configFile);
         }
         config = configFile;
-        connectedGuilds = new HashMap<>();
     }
 
     private void createConfig(File configFile) throws IOException, ParseException {
@@ -55,18 +52,38 @@ public class Config {
         System.out.println ("###    First of all, I'll need your Bot-Token!");
         System.out.println ("###    You can find it on https://discordapp.com/developers");
         System.out.print   ("###    > ");
-        configString += "\t\"token\": \"" + scan.next() + "\",\n";
+        configString += "  \"token\": \"" + scan.next() + "\",\n";
         System.out.println ("###    Alright, thank you! Next, we'll need a command prefix!");
         System.out.println ("###    It defines what symbol indicates that the writing stuff is actually a command!");
         System.out.println ("###    (Our default is \"!\")");
         System.out.print   ("###    > ");
-        configString += "\t\"cmdPrefix\": \"" + scan.next() + "\",\n";
+        configString += "  \"cmdPrefix\": \"" + scan.next() + "\",\n";
         System.out.println ("###    Alright, now I need your account's ID so you're an admin!");
         System.out.println ("###    You get that by right-clicking your Name and \"Copy ID\"");
         System.out.print   ("###    > ");
-        configString += "\t\"admins\": [\"" + scan.next() + "\"],\n";
+        configString += "  \"admins\": [\"" + scan.next() + "\"],\n";
         System.out.println ("###    For now, we'll just have you as an admin. You can add others later!");
-        configString += "\t\"blacklisted\": []\n}";
+        System.out.println ("###    Let me know your member, moderator and admin rolenames now.");
+        System.out.println ("###    These will set the permissions for certain commands. If you wish");
+        System.out.println ("###    to skip that, just write \"skip\". Please give me the name of your member role");
+        System.out.print   ("###    > ");
+        String temp = scan.next();
+        // TO BE DONE TODO
+        if (!temp.toLowerCase().equals("skip")) {
+            configString+= "  \"memberName\": " + temp + "\",";
+            System.out.println ("###    Got it! Now the moderator role name, please!");
+            temp = scan.next();
+            configString+= "  \"moderatorName\": " + temp + "\",";
+            System.out.println ("###    Aaaand now the admin role name, please!");
+            temp = scan.next();
+            configString+= "  \"adminName\": " + temp + "\",";
+        }
+        else {
+            System.out.println("###     That's okay, you'll have to set them up in your config file later though or");
+            System.out.println("###     nobody but you will be able to do anything at all.");
+        }
+
+        configString += "  \"blacklisted\": []\n}";
 
         System.out.println ("###    That was the first time setup! Enjoy using Nootbot!");
         System.out.println ("###########################################");
@@ -95,6 +112,12 @@ public class Config {
             blacklisted.add(Bot.getJDA().getUserById((String) aTempJSONArray));
         }
 
+        // Magic numbers, oh nooo
+        //adminRoleID = (String) temp.get("memberName");
+        moderatorRoleID = (String) temp.get("moderatorName");
+        adminRoleID = (String) temp.get("adminName");
+
+
         presetFolder = new File("presets");
         if (!presetFolder.exists()) {
             boolean success = presetFolder.mkdir();
@@ -105,18 +128,6 @@ public class Config {
         }
         else {
             LOG.info("Preset folder exists.");
-        }
-
-        guildFolder = new File("guilds");
-        if (!guildFolder.exists()) {
-            boolean success = guildFolder.mkdir();
-            if (success)
-                LOG.info("Guild folder didn't exist, created successfully.");
-            else
-                LOG.fatal("Guild folder didn't exist, creating one failed.");
-        }
-        else {
-            LOG.info("Guild folder exists.");
         }
 
         soundFolder = new File("sounds");
@@ -149,21 +160,8 @@ public class Config {
         return blacklisted;
     }
 
-    public static HashMap<String, GuildPermissions> getConnectedGuilds() {
-        return connectedGuilds;
-    }
-
     public static void addAdmin(User u) {
         admins.add(u);
-    }
-
-    public static File getGuildFolder() {
-        return guildFolder;
-    }
-
-    public static void addGuild(Guild g, GuildPermissions guildPermissions) {
-        LOG.info("Adding Guild " + g.getName() + " with ID " + g.getId() + "\" to the system.");
-        connectedGuilds.put(g.getId(), guildPermissions);
     }
 
     public static File getPresetFolder() {
@@ -172,5 +170,13 @@ public class Config {
 
     public static File getSoundFolder() {
         return soundFolder;
+    }
+
+    public static String getAdminRoleID() {
+        return adminRoleID;
+    }
+
+    public static String getModeratorRoleID() {
+        return moderatorRoleID;
     }
 }
