@@ -58,7 +58,7 @@ public class VoiceCommands extends AbstractCommand {
         AudioSourceManagers.registerLocalSource(apm);
         AudioPlayer ap = apm.createPlayer();
         apsh = new AudioPlayerSendHandler(ap);
-        trackScheduler = new TrackScheduler(ap);
+        trackScheduler = new TrackScheduler();
         isConnected = false;
         fileEndings = new HashSet<>();
         fileEndings.add(".mp3");
@@ -67,22 +67,30 @@ public class VoiceCommands extends AbstractCommand {
         Bot.cmdMng.addCommand(new Command("Join channel", Permissions.MEMBER, "join") {
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
-                //Convert param to first VoiceChannel possible
-                //No check if it's actually a text channel, as we already did that in called()
-                List<VoiceChannel> channel = e.getGuild().getVoiceChannelsByName(param, true);
-                if (channel.size() == 0 && !e.getMember().getVoiceState().inVoiceChannel()) {
-                    e.getChannel().sendMessage("Couldn't find that VoiceChannel").complete();
+                VoiceChannel channel;
+                if (args.length != 0) {
+                    List<VoiceChannel> vcs = e.getGuild().getVoiceChannelsByName(param, true);
+                    if (vcs.size() == 0) {
+                        e.getChannel().sendMessage("Couldn't find that VoiceChannel").complete();
+                        return;
+                    }
+                    else {
+                        channel = vcs.get(0);
+                    }
                 }
                 else if(isConnected) {
                     e.getChannel().sendMessage("I'm already connected somewhere else.").complete();
+                    return;
                 }
-                else if(param.equals("join") && e.getMember().getVoiceState().inVoiceChannel()) {
-                    channel = new ArrayList<>();
-                    channel.add(e.getMember().getVoiceState().getChannel());
+                else if(args.length == 0 && e.getMember().getVoiceState().inVoiceChannel()) {
+                    channel = e.getMember().getVoiceState().getChannel();
+                }
+                else {
+                    channel = e.getGuild().getVoiceChannels().get(0);
                 }
 
                 am = e.getGuild().getAudioManager();
-                am.openAudioConnection(channel.get(0));
+                am.openAudioConnection(channel);
                 am.setSendingHandler(apsh);
                 isConnected = true;
 
@@ -151,14 +159,14 @@ public class VoiceCommands extends AbstractCommand {
                             @Override
                             public void trackLoaded(AudioTrack track) {
                                 LOG.debug("Successfully loaded a track and queued it.");
-                                trackScheduler.queue(track);
+                                trackScheduler.onTrackStart(ap, track);
                             }
 
                             @Override
                             public void playlistLoaded(AudioPlaylist playlist) {
                                 LOG.debug("Successfully loaded a playlist and queued it.");
                                 for (AudioTrack track : playlist.getTracks()) {
-                                    trackScheduler.queue(track);
+                                    //trackScheduler.queue(track);
                                 }
                             }
 
@@ -178,7 +186,7 @@ public class VoiceCommands extends AbstractCommand {
                         e.getTextChannel().sendMessage("I don't know what went wrong. RUN!").complete();
                         e1.printStackTrace();
                     }
-                    trackScheduler.nextTrack();
+
                 }
                 else {
                     e.getChannel().sendMessage("I'm connected somewhere else, can't play a sound from here!").complete();

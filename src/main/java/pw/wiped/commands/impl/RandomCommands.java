@@ -151,20 +151,21 @@ public class RandomCommands extends AbstractCommand {
 
             @Override
             public boolean called(String param, String[] args, MessageReceivedEvent e) {
-                if (args[0].equals("save") && args.length <= 3) {
-                    e.getChannel().sendMessage("You either forgot to set a name or have too few arguments.").complete();
-                    return false;
+                if (args.length > 0) {
+                    if (args[0].equals("save") && args.length <= 3) {
+                        e.getChannel().sendMessage("You either forgot to set a name or have too few arguments.").complete();
+                        return false;
+                    } else if (args[0].equals("get") && args.length < 3) {
+                        e.getChannel().sendMessage("You either forgot a username or a name of the preset").complete();
+                        return false;
+                    } else if (args[0].equals("delete") && args.length == 1) {
+                        e.getChannel().sendMessage("You forgot to mention a preset to delete!").complete();
+                        return false;
+                    }
                 }
-                else if (args[0].equals("get") && args.length < 3) {
-                    e.getChannel().sendMessage("You either forgot a username or a name of the preset").complete();
-                    return false;
-                }
-                else if (args[0].equals("delete") && args.length == 1) {
-                    e.getChannel().sendMessage("You forgot to mention a preset to delete!").complete();
-                    return false;
-                }
-                else    // Should cover list and <name> and "empty"
-                    return (args.length > 0);
+                // Should cover list and <name> and "empty"
+                return (args.length > 0);
+
             }
 
             @Override

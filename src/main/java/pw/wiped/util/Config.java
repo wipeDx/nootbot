@@ -114,8 +114,8 @@ public class Config {
 
         // Magic numbers, oh nooo
         //adminRoleID = (String) temp.get("memberName");
-        moderatorRoleID = (String) temp.get("moderatorName");
-        adminRoleID = (String) temp.get("adminName");
+        moderatorRoleID = (String) temp.get("moderatorRoleID");
+        adminRoleID = (String) temp.get("adminRoleID");
 
 
         presetFolder = new File("presets");

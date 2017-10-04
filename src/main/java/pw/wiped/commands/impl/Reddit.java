@@ -1,5 +1,6 @@
 package pw.wiped.commands.impl;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -60,7 +61,11 @@ public class Reddit extends AbstractCommand {
                 boolean isSticky = (boolean) t2.get("stickied");
 
                 // Let through everything if channel is marked NSFW
-                boolean over18 = (!e.getTextChannel().isNSFW() && (boolean) t2.get("over_18"));
+                boolean over18;
+                if (e.getChannelType() == ChannelType.PRIVATE)
+                    over18 = false;
+                else
+                    over18 = (!e.getTextChannel().isNSFW() && (boolean) t2.get("over_18"));
                 int i = 0;
 
                 while ((isSticky || over18) && i < MAX_NSFW_SKIPS) {
@@ -69,8 +74,11 @@ public class Reddit extends AbstractCommand {
                     first = (JSONObject) t3.get(++count);
                     t2 = (JSONObject) first.get("data");
                     isSticky = (boolean) t2.get("stickied");
-                    over18 = (!e.getTextChannel().isNSFW() && (boolean) t2.get("over_18"));
-                    if (!e.getTextChannel().isNSFW()) {
+                    if (e.getChannelType() == ChannelType.PRIVATE)
+                        over18 = false;
+                    else
+                        over18 = (!e.getTextChannel().isNSFW() && (boolean) t2.get("over_18"));
+                    if (e.getChannelType() != ChannelType.PRIVATE && !e.getTextChannel().isNSFW()) {
                         i++;
                         LOG.info(i);
                     }
@@ -84,7 +92,7 @@ public class Reddit extends AbstractCommand {
                     String imageurl = (String) first.get("url");
                     String title = (String) first.get("title");
                     String commentlink = (String) first.get("id");
-                    textToSend = (hot ? "Hottest" : "Newest") + " /r/" + SUBREDDIT + ": " + title + (imageurl.contains("imgur.com") ? "\nDirect link: " + imageurl : "") + "\nComments: https://redd.it/" + commentlink;
+                    textToSend = (hot ? "Hottest" : "Newest") + " /r/" + SUBREDDIT + ": " + title + (imageurl.contains("imgur.com") || imageurl.contains("i.redd.it") ? "\nDirect link: " + imageurl : "") + "\nComments: https://redd.it/" + commentlink;
                 }
                 e.getChannel().sendMessage(textToSend).complete();
             }

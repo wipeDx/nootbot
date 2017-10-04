@@ -23,10 +23,10 @@ public class ShuffleCommands extends AbstractCommand {
                 String[] shuffled = shuffle(param);
                 StringBuilder textToSend = new StringBuilder();
                 for (String s : shuffled) {
-                    textToSend.append(s).append(", ");
+                    textToSend.append(s).append(' ');
                 }
                 textToSend.replace(textToSend.length()-2, textToSend.length(), "");
-                e.getTextChannel().sendMessage(textToSend.toString()).complete();
+                e.getChannel().sendMessage(textToSend.toString()).complete();
             }
 
             @Override
@@ -74,7 +74,7 @@ public class ShuffleCommands extends AbstractCommand {
                     textToSend.append(shuffled[i]).append(", ");
                 }
                 textToSend.replace(textToSend.length()-2, textToSend.length(), "");
-                e.getTextChannel().sendMessage(textToSend.toString()).complete();
+                e.getChannel().sendMessage(textToSend.toString()).complete();
             }
 
             @Override

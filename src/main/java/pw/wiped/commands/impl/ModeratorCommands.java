@@ -1,5 +1,6 @@
 package pw.wiped.commands.impl;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -59,11 +60,16 @@ public class ModeratorCommands extends AbstractCommand {
 
             @Override
             public void action(String param, String[] args, MessageReceivedEvent e) {
-                List<Message> list = e.getTextChannel().getHistory().retrievePast(amount + 1).complete();
-                if (LOG.getLevel() == SimpleLog.Level.DEBUG)
-                    for (Message m : list)
-                        LOG.debug("Deleting message: " + m.getContent());
-                e.getTextChannel().deleteMessages(list).complete();
+                if (e.getChannelType() == ChannelType.PRIVATE) {
+                    e.getChannel().sendMessage("This doesn't work in a private channel!");
+                }
+                else {
+                    List<Message> list = e.getTextChannel().getHistory().retrievePast(amount + 1).complete();
+                    if (LOG.getLevel() == SimpleLog.Level.DEBUG)
+                        for (Message m : list)
+                            LOG.debug("Deleting message: " + m.getContent());
+                    e.getTextChannel().deleteMessages(list).complete();
+                }
             }
 
             @Override

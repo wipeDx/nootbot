@@ -29,7 +29,7 @@ public class PermissionHandler {
         if (guild == null) {
             return Permissions.MEMBER;
         }
-        LOG.debug("Checking " + user.getName() + "(" + user.getId() + ") in Guild " + guild.getName() + "(" + guild.getId() + ")");
+        LOG.info("Checking " + user.getName() + "(" + user.getId() + ") in Guild " + guild.getName() + "(" + guild.getId() + ")");
 
         // Check if user is member
         Member m = guild.getMember(user);

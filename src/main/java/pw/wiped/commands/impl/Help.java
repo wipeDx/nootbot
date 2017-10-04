@@ -35,16 +35,19 @@ public class Help extends AbstractCommand {
                 String desc;
                 String title;
                 String footer;
-
-                if (args.length > 0 && CommandManager.getCommands().containsKey(args[0])) {
+                boolean exists =  args.length > 0 ? CommandManager.getCommands().containsKey(args[0]) : true;
+                if (args.length > 0 && exists) {
                     helpString = CommandManager.getCommands().get(args[0]).moreHelp();
-                    ai = new MessageEmbed.AuthorInfo("Noot Noot!", "https://home.wiped.pw/nootbot", "", "");
+                    ai = new MessageEmbed.AuthorInfo("Noot Noot!", "https://home.wiped.pw/nootbot",
+                            "", "");
                     desc = "";
                     title = CommandManager.getCommands().get(args[0]).name;
                     footer = "";
                 } else {
-                    ai = new MessageEmbed.AuthorInfo("Noot Noot! (Version " + Bot.VERSION+ ")", "https://home.wiped.pw/nootbot", "", "");
-                    desc = "Sadly, the links are not clickable! Just for aesthetics :frowning:";
+                    ai = new MessageEmbed.AuthorInfo("Noot Noot! (Version " + Bot.VERSION+ ")",
+                            "https://home.wiped.pw/nootbot", "", "");
+                    desc = "Sadly, the links are not clickable! Just for aesthetics :frowning:"
+                                + "If you need further assistance, just write: " + Config.getCmdPrefix() + "help <CMD>";
                     helpString = this.help();
                     title = "Main commands";
                     footer = "Made with ♥ by @wipeD#1889! Click the title to visit the GitHub Page of NootBot!";
@@ -56,21 +59,28 @@ public class Help extends AbstractCommand {
                 me.setTitle("");
                 me.setColor(Color.black);
                 ArrayList<MessageEmbed.Field> fieldList = new ArrayList<>();
-                for (int i = 0; i < helpStrings.length - 2; i++)
-                    fieldList.add(new MessageEmbed.Field(title + '(' + (i+1) + '/' + (helpStrings.length - 2) + ')', helpStrings[i], false));
-                if (args.length == 0) {
-                    if (PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.MODERATOR
-                            || PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.ADMIN) {
-                        fieldList.add(new MessageEmbed.Field("Moderator Commands", helpStrings[1], false));
-                        if (PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.ADMIN) {
-                            fieldList.add(new MessageEmbed.Field("Admin Commands", helpStrings[2], false));
+                if (args.length > 0 && exists) {
+                    Command cmd = CommandManager.getCommands().get(args[0]);
+                    fieldList.add(new MessageEmbed.Field(cmd.name, cmd.moreHelp(), false));
+                }
+                else {
+                    for (int i = 0; i < helpStrings.length - 2; i++)
+                        fieldList.add(new MessageEmbed.Field(title + '(' + (i + 1) + '/' + (helpStrings.length - 2)
+                                + ')', helpStrings[i], false));
+                    if (args.length == 0) {
+                        if (PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.MODERATOR
+                                || PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.ADMIN) {
+                            fieldList.add(new MessageEmbed.Field("Moderator Commands", helpStrings[1], false));
+                            if (PermissionHandler.getUserPermission(e.getAuthor(), e.getGuild()) == Permissions.ADMIN) {
+                                fieldList.add(new MessageEmbed.Field("Admin Commands", helpStrings[2], false));
+                            }
                         }
                     }
                 }
+
                 me.setFields(fieldList);
                 me.setFooter(new MessageEmbed.Footer(footer, "", ""));
                 me.setImage(new MessageEmbed.ImageInfo("", "", 0, 0));
-
                 e.getAuthor().openPrivateChannel().complete().sendMessage(me).complete();
                 if (e.getChannelType() == ChannelType.TEXT) {
                     e.getMessage().delete().complete();
@@ -90,7 +100,7 @@ public class Help extends AbstractCommand {
                 StringBuilder current;
                 int count = 1;
                 ArrayList<Command> checked = new ArrayList<>();
-                mainCommands.append("[.help]() - Displays this message\n\n");
+                mainCommands.append("[" + Config.getCmdPrefix() + "help]() - Displays this message\n\n");
                 for (Command c : CommandManager.getCommands().values()) {
                     switch (c.requiredPermissions) {
                         case ADMIN: current = adminCommands; break;
@@ -114,7 +124,12 @@ public class Help extends AbstractCommand {
 
             @Override
             public String moreHelp() {
-                return this.help();
+
+                StringBuilder sb = getHelpText(0, 1);
+                sb.append(" - A command's name or nothing.\n\n");
+                sb.append("Displays (hopefully) every documentation of a command.");
+                return sb.toString();
+
             }
         });
     }
